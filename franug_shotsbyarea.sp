@@ -21,7 +21,9 @@
 #pragma semicolon 1
 #pragma newdecls required
 
-#define PLUGIN_VERSION "1.0"
+#define PLUGIN_VERSION "1.1"
+
+ConVar cv_distance;
 
 public Plugin myinfo =
 {
@@ -35,6 +37,8 @@ public Plugin myinfo =
 public void OnPluginStart()
 {
 	CreateConVar("sm_franugshotsbyarea_version", PLUGIN_VERSION, "", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
+	
+	cv_distance = CreateConVar("sm_franugshotsbyarea_distance", "1000.0", "Minimum distance from the shooter for don't hear him when the listener dont are in the same map place that shooter. 0.0 = use only map places");
 	
 	// weapon sounds
 	AddTempEntHook("Shotgun Shot", Hook_ShotgunShot);
@@ -118,7 +122,15 @@ public bool CanHear(int shooter, int client) {
 
     // Block the transmisson.
     if (!StrEqual(area1, area2)) {
-        return false;
+    	
+		float shooterPos[3];
+		float clientPos[3];
+		GetClientAbsOrigin(shooter, shooterPos);
+		GetClientAbsOrigin(client, clientPos);
+		float distance = GetVectorDistance(shooterPos, clientPos);
+		
+		if(distance >= cv_distance.FloatValue)
+        	return false;
     }
 
     // Transmit by default.
