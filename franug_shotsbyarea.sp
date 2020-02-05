@@ -38,7 +38,7 @@ public void OnPluginStart()
 {
 	CreateConVar("sm_franugshotsbyarea_version", PLUGIN_VERSION, "", FCVAR_SPONLY|FCVAR_REPLICATED|FCVAR_NOTIFY);
 	
-	cv_distance = CreateConVar("sm_franugshotsbyarea_distance", "1000.0", "Minimum distance from the shooter for don't hear him when the listener dont are in the same map place that shooter. 0.0 = use only map places");
+	cv_distance = CreateConVar("sm_franugshotsbyarea_distance", "1000.0", "Max distance from the shooter for don't hear him when the listener dont are in the same map place that shooter. 0.0 = use only map places");
 	
 	// weapon sounds
 	AddTempEntHook("Shotgun Shot", Hook_ShotgunShot);
